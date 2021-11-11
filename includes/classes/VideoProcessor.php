@@ -86,7 +86,7 @@ class VideoProcessor {
 
     private function insertVideoData($uploadData, $filePath) {
         $query = $this->con->prepare("INSERT INTO videos(title, uploadedBy, description, privacy, category, filePath, duration)
-                                    VALUE(:title, :uploadedBy, :description, :privacy, :category, :filePath, :duration)");
+                                    VALUES(:title, :uploadedBy, :description, :privacy, :category, :filePath, :duration)");
         
         $title = $uploadData->getTitle();
         $uploadedBy = $uploadData->getUploadedBy();
@@ -158,7 +158,7 @@ class VideoProcessor {
             }
 
             $query = $this->con->prepare("INSERT INTO thumbnails (videoId, filePath, selected)
-                                        VALUE(:videoId, :filePath, :selected)");
+                                        VALUES(:videoId, :filePath, :selected)");
 
             $selected = $num == 1 ? 1 : 0;
             $query->bindParam(":videoId", $videoId);

@@ -9,5 +9,5 @@
     $userLoggedInObj = new User($con, $username);
     $video = new Video($con, $videoId, $userLoggedInObj);
 
-    echo $video->like();
+    echo $video->dislike();
 ?>

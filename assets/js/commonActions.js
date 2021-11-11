@@ -12,3 +12,7 @@ $(document).ready(() => {
         main.toggleClass("LeftPadding");
     })
 });
+
+notSignedIn = () => {
+    alert("You must be signed in to perform this action")
+}

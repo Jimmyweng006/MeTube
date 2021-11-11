@@ -43,7 +43,7 @@ Class Account {
         $profiePic = "assets/images/profilePictures/default.png";
 
         $query = $this->con->prepare("INSERT INTO users (firstName, lastName, username, email, password, profilePic) 
-                                    VALUE(:fn, :ln, :un, :em, :pw, :pic)");
+                                    VALUES(:fn, :ln, :un, :em, :pw, :pic)");
         $query->bindParam(":fn", $fn);
         $query->bindParam(":ln", $ln);
         $query->bindParam(":un", $un);
