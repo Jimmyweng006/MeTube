@@ -46,8 +46,9 @@ class Video {
         return $this->sqlData["category"];
     }
 
-    public function getUploadData() {
-        return $this->sqlData["uploadDate"];
+    public function getUploadDate() {
+        $date = $this->sqlData["uploadDate"];
+        return date("M j, Y", strtotime($date));
     }
 
     public function getViews() {
