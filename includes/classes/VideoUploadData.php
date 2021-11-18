@@ -12,8 +12,6 @@ class VideoUploadData {
         $this->uploadedBy = $uploadedBy;
     }
 
-    // todo: create function to get data -- done
-
     public function getVideoDataArray() {
         return $this->videoDataArray;
     }

@@ -47,6 +47,7 @@ dislikeVideo = (button, videoId) => {
         likeButton.find("img:first").attr("src", "assets/images/icons/thumb-up.png");
     });
 }
+
 updateLikesValue = (element, num) => {
     var likesCountVal = element.text() || 0;
     element.text(parseInt(likesCountVal) + parseInt(num));

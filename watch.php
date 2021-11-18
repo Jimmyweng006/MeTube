@@ -2,8 +2,11 @@
     require_once("includes/header.php");
     require_once("includes/classes/VideoPlayer.php");
     require_once("includes/classes/VideoInfoSection.php");
+    require_once("includes/classes/Comment.php");
+    require_once("includes/classes/CommentSection.php");
 ?>
-<script src="assets/js/videoPlayerAction.js"></script>
+<script src="assets/js/videoPlayerActions.js"></script>
+<script src="assets/js/commentActions.js"></script>
 
     <?php
         if (!isset($_GET["id"])) {
@@ -22,6 +25,9 @@
 
             $videoInfoSection = new VideoInfoSection($con, $video, $userLoggedInObj);
             echo $videoInfoSection->create();
+
+            $commentSection = new CommentSection($con, $video, $userLoggedInObj);
+            echo $commentSection->create();
         ?>
     </div>
 
