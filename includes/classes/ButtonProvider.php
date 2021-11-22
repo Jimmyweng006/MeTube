@@ -30,13 +30,22 @@ class ButtonProvider {
     }
 
     public static function createUserProfileButton($con, $username) {
-        $userObj = new User($con, $username);
-        $profilePic = $userObj->getProfilePic();
-        $link = "profile.php?username=$username";
+        if ($username == "") {
+            $link = ButtonProvider::$signInFunction;
+            $profilePic = "assets/images/profilePictures/default.png";
+            
+            return "<a onclick='$link'>
+                        <img src='$profilePic' class='profilePicture'>
+                    </a>";
+        } else {
+            $userObj = new User($con, $username);
+            $profilePic = $userObj->getProfilePic();
+            $link = "profile.php?username=$username";
 
-        return "<a href='$link'>
-                    <img src='$profilePic' class='profilePicture'>
-                </a>";
+            return "<a href='$link'>
+                        <img src='$profilePic' class='profilePicture'>
+                    </a>";
+        }
     }
 
     public static function createEditVideoButton($videoId) {

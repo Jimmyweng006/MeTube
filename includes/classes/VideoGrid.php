@@ -44,11 +44,48 @@ class VideoGrid {
     }
 
     public function generateItemsFromVideos($videos) {
-        
+        $elementsHtml = "";
+        foreach ($videos as $video) {
+            $item = new VideoGridItem($video, $this->largeMode);
+            $elementsHtml .= $item->create();
+        }
+
+        return $elementsHtml;
     }
 
     public function createGridHeader($title, $showFilter) {
-        
+        $filter = "";
+
+        if ($showFilter) {
+            $link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
+            $urlArray = parse_url($link);
+            $query = $urlArray["query"];
+
+            parse_str($query, $params);
+            unset($params["orderBy"]);
+
+            $newUrl = http_build_query($params);
+            $newUrl = basename($_SERVER["PHP_SELF"]) . "?" . $newUrl;
+            $filter = "<div class='right'>
+                            <span>Order by:</span>
+                            <a href='$newUrl&orderBy=uploadDate'>Upload Date</a>
+                            <a href='$newUrl&orderBy=views'>Most viewd</a>
+                        </div>";
+        }
+
+        return "<div class='videoGridHeader'>
+                    <div class='left'>
+                        $title
+                    </div>
+                    $filter
+                </div>";
+    }
+
+    public function createLarge($videos, $title, $showFilter) {
+        $this->gridClass .= " large";
+        $this->largeMode = "true";
+        return $this->create($videos, $title, $showFilter);
     }
 }
 ?>
