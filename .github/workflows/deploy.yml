@@ -1,0 +1,23 @@
+# name: Auto Deploy
+
+# on:
+#   push:
+#     branches:
+#       - master
+
+# jobs:
+#   build:
+#     name: pull latest codebase
+#     runs-on: ubuntu-latest
+#     steps:
+#     - name: executing remote ssh commands using ssh key
+#       uses: appleboy/ssh-action@master
+#       with:
+#         host: jimmy-kiet.tech
+#         username: Jimmy_kiet
+#         key: ${{ secrets.METUBE_SECRET }}
+#         port: 22
+#         script: |
+#           cd /var/www/html/MeTube
+#           git pull
+#           git status

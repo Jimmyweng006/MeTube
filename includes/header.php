@@ -38,7 +38,7 @@
             </button>
 
             <a class="logoContainer" href="index.php">
-                <img src="assets/images/icons/VideoTubeLogo.png" title="logo" alt="site logo">
+                <img src="assets/images/icons/MeTubeLogo.png" title="logo" alt="site logo">
             </a>
 
             <div class="searchBarContainer">

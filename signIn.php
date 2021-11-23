@@ -45,7 +45,7 @@
         <div class="column">
 
             <div class="header">
-                <img src="assets/images/icons/VideoTubeLogo.png" title="logo" alt="site logo">
+                <img src="assets/images/icons/MeTubeLogo.png" title="logo" alt="site logo">
                 <h3>Sign In</h3>
                 <span>to continue to MeTube</span>
             </div>
