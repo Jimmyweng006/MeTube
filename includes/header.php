@@ -54,7 +54,7 @@
                 <a href="upload.php">
                     <img class="upload" src="assets/images/icons/upload.png" alt="upload video">
                 </a>
-                <a href="#">
+                <a href="signIn.php">
                     <img class="upload" src="assets/images/profilePictures/default.png" alt="profile picture">
                 </a>
             </div>
