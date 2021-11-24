@@ -11,6 +11,19 @@
     $userLoggedInObj = new User($con, $usernameLoggedIn);
 ?>
 
+<?php
+    if ($usernameLoggedIn == "") {
+        $link = ButtonProvider::$signInFunction;
+        $uploadPic = "<a onclick='$link'>
+                        <img class='upload' src='assets/images/icons/upload.png' alt='upload video'>
+                    </a>";
+    } else {
+        $uploadPic = "<a href='upload.php'>
+                        <img class='upload' src='assets/images/icons/upload.png' alt='upload video'>
+                    </a>";
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,9 +64,9 @@
             </div>
 
             <div class="rightIcons">
-                <a href="upload.php">
-                    <img class="upload" src="assets/images/icons/upload.png" alt="upload video">
-                </a>
+                <?php
+                    echo $uploadPic
+                ?>
                 <a href="signIn.php">
                     <img class="upload" src="assets/images/profilePictures/default.png" alt="profile picture">
                 </a>
