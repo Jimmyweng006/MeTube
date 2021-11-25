@@ -191,7 +191,7 @@ class VideoProcessor {
         
         $hours = $hours < 1 ? "" : $hours . ":";
         $minutes = $minutes < 10 ? "0$minutes" . ":" : "$minutes" . ":";
-        $seconds = $seconds < 10 ? "0$seconds" : "$minutes";
+        $seconds = $seconds < 10 ? "0$seconds" : "$seconds";
 
         $duration = $hours . $minutes . $seconds;
 
