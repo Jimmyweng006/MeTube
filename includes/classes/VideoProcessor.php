@@ -4,8 +4,8 @@ class VideoProcessor {
     private $con;
     private $sizeLimit = 500000000;
     private $allowedTypes = array("mp4", "flv", "webm", "mkv", "vob", "ogv", "ogg", "avi", "wmv", "mov", "mpeg", "mpg");
-    private $ffmpegPath = "/opt/homebrew/bin/ffmpeg";
-    private $ffprobePath = "/opt/homebrew/bin/ffprobe";
+    private $ffmpegPath = "/usr/bin/ffmpeg";
+    private $ffprobePath = "/usr/bin/ffprobe";
 
     public function __construct($con) {
         $this->con = $con;
