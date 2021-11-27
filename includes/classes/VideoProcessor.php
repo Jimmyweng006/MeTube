@@ -2,8 +2,7 @@
 class VideoProcessor {
     
     private $con;
-    private $sizeLimit = 500000000;
-    private $allowedTypes = array("mp4", "flv", "webm", "mkv", "vob", "ogv", "ogg", "avi", "wmv", "mov", "mpeg", "mpg");
+    private $sizeLimit = 60000000;
     private $ffmpegPath = "/usr/bin/ffmpeg";
     private $ffprobePath = "/usr/bin/ffprobe";
 
@@ -40,11 +39,6 @@ class VideoProcessor {
                 return false;
             }
 
-            if (!$this->deleteFile($tempFilePath)) {
-                echo "Delete temp file failed.\n";
-                return false;
-            }
-
             if (!$this->generateThumbnails($finalFilePath)) {
                 echo "Generate thumbnails failed.\n";
                 return false;
@@ -58,13 +52,13 @@ class VideoProcessor {
         $videoType = pathinfo($filePath, PATHINFO_EXTENSION);
 
         if (!$this->isValidSize($videoData)) {
-            echo "File to large. Can't exceed " . $this->sizeLimit . " bytes.";
+            echo "File to large. Can't exceed " . $this->sizeLimit . " bytes.\n";
             return false;
         } else if (!$this->isValidType($videoType)) {
-            echo "Not supported file types.";
+            echo "Only support .mp4 video types.\n";
             return false;
         } else if ($this->hasError($videoData)) {
-            echo "Error code: " . $videoData["error"];
+            echo "Error code: " . $videoData["error"] . "\n";
             return false;
         }
 
@@ -77,7 +71,7 @@ class VideoProcessor {
 
     private function isValidType($type) {
         $lowercased = strtolower($type);
-        return in_array($type, $this->allowedTypes);
+        return $type == "mp4";
     }
 
     private function hasError($data) {
@@ -107,18 +101,7 @@ class VideoProcessor {
     }
 
     public function convertVideoToMp4($tempFilePath, $finalFilePath) {
-        $cmd = "$this->ffmpegPath -i $tempFilePath $finalFilePath 2>&1";
-
-        $outputLog = array();
-        exec($cmd, $outputLog, $returnCode);
-
-        if ($returnCode != 0) {
-            foreach($outputLog as $line) {
-                echo $line . "<br>";
-            }
-            return false;
-        }
-
+        rename($tempFilePath, $finalFilePath);
         return true;
     }
 
@@ -168,7 +151,7 @@ class VideoProcessor {
             $success = $query->execute();
 
             if (!$success) {
-                echo "Error inserting thunmnail!\n";
+                echo "Error inserting thumbnail!\n";
                 return false;
             }
         }
