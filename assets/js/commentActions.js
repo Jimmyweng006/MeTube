@@ -37,7 +37,7 @@ likeComment = (commentId, button, videoId) => {
         dislikeButton.removeClass("active");
         
         let likesCount = $(button).siblings(".likesCount");
-        updateLikesValue(likesCount, numToChange);
+        updateCommentLikesValue(likesCount, numToChange);
 
         if (numToChange < 0) {
             likeButton.removeClass("active");
@@ -61,7 +61,7 @@ dislikeComment = (commentId, button, videoId) => {
         likeButton.removeClass("active");
 
         let likesCount = $(button).siblings(".likesCount");
-        updateLikesValue(likesCount, numToChange);
+        updateCommentLikesValue(likesCount, numToChange);
 
         if (numToChange > 0) {
             dislikeButton.removeClass("active");
@@ -74,7 +74,7 @@ dislikeComment = (commentId, button, videoId) => {
     });
 }
 
-updateLikesValue = (element, num) => {
+updateCommentLikesValue = (element, num) => {
     var likesCountVal = element.text() || 0;
     element.text(parseInt(likesCountVal) + parseInt(num) == 0 ? "" : parseInt(likesCountVal) + parseInt(num));
 }

@@ -4,6 +4,14 @@
 
 ## 架構相關
 
+### upload/processing/VideoDetailsFormProvider/VideoUploadData/VideoProcessor
+
+處理影片上傳相關
+
+### watch/VideoPlayer/VideoInfoSection/VideoInfoControls/videoPlayerActions/likeVideo/Video
+
+各別影片頁面相關
+
 ### watch.php
 
 commentSection
@@ -83,6 +91,14 @@ commentSection
 2. 搜尋條件：title/description LIKE CONCAT('%', :term, '%')
 3. 搜尋影片結果，依據filter的條件排序
 
+### 加速likes/dislikes
+
+1. 幫videos開兩個欄位likes/dislikes，直接update這個值就可以。但如果同時有兩個人likes or dislikes同一個影片，會有race condition問題。
+2. 首先用兩台電腦，各別登入不同的帳號，同時按下同一個影片的likes，頁面重整後會顯示likes = 2，正常！
+3. GG感覺不可行了，還是需要likes/dislikes來記錄用戶是否有likes/dislikes某部影片(用來顯示) => 直接兩個table同時使用就好！
+4. 同時按竟然沒有發生race condition...是我手速太慢還是資料庫都處理好了呢？
+5. 看來資料庫本身就有access queue幫你處理同時有多個requests的情況：）
+
 ### EC2相關
 
 #### 設定
@@ -133,3 +149,32 @@ ssh: handshake failed: ssh: unable to authenticate, attempted methods [none publ
 
 1. 未登入的狀態下，watch.php的profilePic會出事
     * fix：修改getProfilePic跟createUserProfileButton即可。
+2. 未登入的狀態下可以上傳影片
+    * fix：加入notSignedIn()
+3. server沒有下載ffmpeg
+    * fix：就下載然後改一下path
+    * local開prod branch，然後推到remote repo
+    * 怎麼把branch拉到server上...，branch推上去後server直接用checkout就好：git checkout production
+4. 無法上傳影片：查看/var/log/apache2/error.log
+    * POST Content-Length of 23367328 bytes exceeds the limit of 8388608 bytes in Unknown on line 0, referer: https://jimmy-kiet.tech/MeTube/upload.php
+    * 找php.ini path：$ php --ini，結果是要改/etc/php/7.2/apache2/php.ini QQ。https://stackoverflow.com/questions/51681145/php-ini-not-updating-after-changes
+    * 在/etc/php/7.2/cli/php.ini開頭增加兩行：$ sudo vim /etc/php/7.2/cli/php.ini
+        * upload_max_filesize = 1000M;
+        * post_max_size = 1000M;
+    * 重啟：
+        * $ sudo service apache2 reload
+        * $ sudo service php7.2-fpm restart 這好像不用(?)
+    * 成功囉，太神啦
+5. duration GG
+    ```
+    fix：$seconds = $seconds < 10 ? "0$seconds" : "$minutes";
+    minutes要改成seconds才對...虛驚一場
+    ```
+6. 上傳一個85mb的影片ec2就罷工了，慘。
+    * 5x mb的影片會有code 137的問題，看來是轉檔的時候吃太多記憶體ffmpeg被kill了
+    * 看來只能傳不到20mb的影片了...
+    * 不做轉檔了，所以只接受.mp4的影片
+    * 目前最高能上傳，不超過60mb的影片
+
+7. 影片的likes/dislike數字等於零會消失
+    * fix：原來是因為兩個js用來更新數字的function名稱一樣，所以videoPlayerActions.js在update likes/dislikes的時候，不知道怎樣吃到commentActions的updateLikesValue function了，有夠可怕...
