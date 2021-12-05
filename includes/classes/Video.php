@@ -80,23 +80,21 @@ class Video {
     }
 
     public function getLikes() {
-        $query = $this->con->prepare("SELECT count(*) as 'count' FROM likes WHERE videoId = :videoId");
+        $query = $this->con->prepare("SELECT likes FROM videos WHERE id = :videoId");
         $query->bindParam(":videoId", $videoId);
         $videoId = $this->getId();
         $query->execute();
 
-        $data = $query->fetch(PDO::FETCH_ASSOC);
-        return $data["count"];
+        return $query->fetchColumn();
     }
 
     public function getDislikes() {
-        $query = $this->con->prepare("SELECT count(*) as 'count' FROM dislikes WHERE videoId = :videoId");
+        $query = $this->con->prepare("SELECT dislikes FROM videos WHERE id = :videoId");
         $query->bindParam(":videoId", $videoId);
         $videoId = $this->getId();
         $query->execute();
 
-        $data = $query->fetch(PDO::FETCH_ASSOC);
-        return $data["count"];
+        return $query->fetchColumn();
     }
 
     public function like() {
@@ -108,6 +106,10 @@ class Video {
             $query->bindParam(":username", $username);
             $query->bindParam(":videoId", $id);
             $query->execute();
+            
+            $query2 = $this->con->prepare("UPDATE videos SET likes = likes - 1 WHERE id = :videoId");
+            $query2->bindParam(":videoId", $id);
+            $query2->execute();
 
             $result = array(
                 "likes" => -1,
@@ -120,11 +122,20 @@ class Video {
             $query->bindParam(":videoId", $id);
             $query->execute();
             $count = $query->rowCount();
+            if ($count > 0) {
+                $query2 = $this->con->prepare("UPDATE videos SET dislikes = dislikes - 1 WHERE id = :videoId");
+                $query2->bindParam(":videoId", $id);
+                $query2->execute();
+            }
 
             $query = $this->con->prepare("INSERT INTO likes(username, videoId) VALUES(:username, :videoId)");
             $query->bindParam(":username", $username);
             $query->bindParam(":videoId", $id);
             $query->execute();
+
+            $query2 = $this->con->prepare("UPDATE videos SET likes = likes + 1 WHERE id = :videoId");
+            $query2->bindParam(":videoId", $id);
+            $query2->execute();
 
             $result = array(
                 "likes" => 1,
@@ -144,6 +155,10 @@ class Video {
             $query->bindParam(":videoId", $id);
             $query->execute();
 
+            $query2 = $this->con->prepare("UPDATE videos SET dislikes = dislikes - 1 WHERE id = :videoId");
+            $query2->bindParam(":videoId", $id);
+            $query2->execute();
+
             $result = array(
                 "likes" => 0,
                 "dislikes" => -1,
@@ -155,11 +170,20 @@ class Video {
             $query->bindParam(":videoId", $id);
             $query->execute();
             $count = $query->rowCount();
+            if ($count > 0) {
+                $query2 = $this->con->prepare("UPDATE videos SET likes = likes - 1 WHERE id = :videoId");
+                $query2->bindParam(":videoId", $id);
+                $query2->execute();
+            }
 
             $query = $this->con->prepare("INSERT INTO dislikes(username, videoId) VALUES(:username, :videoId)");
             $query->bindParam(":username", $username);
             $query->bindParam(":videoId", $id);
             $query->execute();
+
+            $query2 = $this->con->prepare("UPDATE videos SET dislikes = dislikes + 1 WHERE id = :videoId");
+            $query2->bindParam(":videoId", $id);
+            $query2->execute();
 
             $result = array(
                 "likes" => 0 - $count,
