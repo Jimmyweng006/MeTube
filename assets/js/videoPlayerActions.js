@@ -9,8 +9,8 @@ likeVideo = (button, videoId) => {
         dislikeButton.removeClass("active");
 
         result = JSON.parse(data);
-        updateLikesValue(likeButton.find(".text"), result.likes);
-        updateLikesValue(dislikeButton.find(".text"), result.dislikes);
+        updateVideoLikesValue(likeButton.find(".text"), result.likes);
+        updateVideoLikesValue(dislikeButton.find(".text"), result.dislikes);
 
         if (result.likes < 0) {
             likeButton.removeClass("active");
@@ -34,8 +34,8 @@ dislikeVideo = (button, videoId) => {
         likeButton.removeClass("active");
 
         result = JSON.parse(data);
-        updateLikesValue(dislikeButton.find(".text"), result.dislikes);
-        updateLikesValue(likeButton.find(".text"), result.likes);
+        updateVideoLikesValue(dislikeButton.find(".text"), result.dislikes);
+        updateVideoLikesValue(likeButton.find(".text"), result.likes);
 
         if (result.dislikes < 0) {
             dislikeButton.removeClass("active");
@@ -48,7 +48,7 @@ dislikeVideo = (button, videoId) => {
     });
 }
 
-updateLikesValue = (element, num) => {
+updateVideoLikesValue = (element, num) => {
     var likesCountVal = element.text() || 0;
     element.text(parseInt(likesCountVal) + parseInt(num));
 }
