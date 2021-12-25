@@ -1,5 +1,5 @@
 <?php
-class SubscriptionProvider {
+class SubscriptionsProvider {
 
     private $con, $userLoggedInObj;
 
