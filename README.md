@@ -84,7 +84,7 @@ commentSection
 1. 結構(外到內)：VideoGrid >> VideoGridItem
 2. 影片來源：根據$videoGrid->create()的第一個參數決定
 3. subscriptionVideos：用subscriptions list組出uploadedby = user1 OR user2 OR user3...的SQL。
-4. SubscriptionProvider的bindParam要改成bindValue???
+4. SubscriptionsProvider的bindParam要改成bindValue???
 
 ### 搜尋影片相關
 1. 預設是依照觀看次數多到少排序
@@ -98,6 +98,15 @@ commentSection
 3. GG感覺不可行了，還是需要likes/dislikes來記錄用戶是否有likes/dislikes某部影片(用來顯示) => 直接兩個table同時使用就好！
 4. 同時按竟然沒有發生race condition...是我手速太慢還是資料庫都處理好了呢？
 5. 看來資料庫本身就有access queue幫你處理同時有多個requests的情況：）
+
+### 側邊導覽相關
+
+1. trending videos：most viewed videos in last 7 days
+2. subscriptions videos
+3. liked videos
+    * commentId = 0或是commentId = NULL的寫法都GG，後來改成下面的寫法
+    * SELECT videoId from likes WHERE username = :username AND videoId ORDER BY id DESC"
+
 
 ### EC2相關
 

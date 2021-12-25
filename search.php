@@ -3,7 +3,6 @@
     require_once("includes/classes/SearchResultsProvider.php");
 ?>
 
-
 <?php
     if (!isset($_GET["term"]) || $_GET["term"] == "") {
         echo "You must enter a search term";
