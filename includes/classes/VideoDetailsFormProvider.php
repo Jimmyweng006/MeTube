@@ -22,8 +22,7 @@ class VideoDetailsFormProvider {
                     $privacyInput
                     $categories
                     $uploadButton
-                </form>"
-        ;
+                </form>";
     }
 
     private function createFileInput() {
