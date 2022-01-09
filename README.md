@@ -107,6 +107,21 @@ commentSection
     * commentId = 0或是commentId = NULL的寫法都GG，後來改成下面的寫法
     * SELECT videoId from likes WHERE username = :username AND videoId ORDER BY id DESC"
 
+### 個人頁面相關
+
+1. 結構：ProfileGenerator >> ProfileData >> User
+2. profileUsersVideos：跟index.php的方法類似
+
+### 個人資料設定相關
+
+1. 直接拿VideoDetailsFormProvider來改
+
+### 編輯影片相關
+
+1. 需要考慮上傳影片者跟當前使用者是否為同一人
+2. 更新影片的縮圖(ajax)
+3. 更新video資料 => reuse VideoUploadData class
+4. 更新video資料後也要更新video instance
 
 ### EC2相關
 
