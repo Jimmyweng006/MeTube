@@ -9,10 +9,10 @@ class VideoDetailsFormProvider {
 
     public function createUploadForm () {
         $fileInput = $this->createFileInput();
-        $titleInput = $this->createTitleInput();
-        $descriptionInput = $this->createDescriptionInput();
-        $privacyInput = $this->createPrivacyInput();
-        $categories = $this->createCategoriesInput();
+        $titleInput = $this->createTitleInput(null);
+        $descriptionInput = $this->createDescriptionInput(null);
+        $privacyInput = $this->createPrivacyInput(null);
+        $categories = $this->createCategoriesInput(null);
         $uploadButton = $this->createUploadButton();
         
         return "<form action='processing.php' method='POST' enctype='multipart/form-data'>
@@ -25,6 +25,22 @@ class VideoDetailsFormProvider {
                 </form>";
     }
 
+    public function createEditDetailsForm ($video) {
+        $titleInput = $this->createTitleInput($video->getTitle());
+        $descriptionInput = $this->createDescriptionInput($video->getDescription());
+        $privacyInput = $this->createPrivacyInput($video->getPrivacy());
+        $categories = $this->createCategoriesInput($video->getCategory());
+        $saveButton = $this->createSaveButton();
+        
+        return "<form method='POST'>
+                    $titleInput
+                    $descriptionInput
+                    $privacyInput
+                    $categories
+                    $saveButton
+                </form>";
+    }
+
     private function createFileInput() {
         return "<div class='form-group'>
                     <label for='exampleFormControlFile1'>Your file</label>
@@ -32,28 +48,35 @@ class VideoDetailsFormProvider {
                 </div>";
     }
 
-    private function createTitleInput() {
+    private function createTitleInput($value) {
+        if ($value == null) $value = "";
         return "<div class='form-group'>
-                    <input class='form-control' type='text' placeholder='Title' name='titleInput'>
+                    <input class='form-control' type='text' placeholder='Title' name='titleInput' value='$value'>
                 </div>";
     }
 
-    private function createDescriptionInput() {
+    private function createDescriptionInput($value) {
+        if ($value == null) $value = "";
         return "<div class='form-group'>
-                    <textarea class='form-control' placeholder='Description' name='descriptionInput' row='3'></textarea>
+                    <textarea class='form-control' placeholder='Description' name='descriptionInput' row='3'>$value</textarea>
                 </div>";
     }
 
-    private function createPrivacyInput() {
+    private function createPrivacyInput($value) {
+        if ($value == null) $value = "";
+
+        $privateSelected = $value == 0 ? "selected='selected'" : "";
+        $publicSelected = $value == 1 ? "selected='selected'" : "";
         return "<div class='form-group'>
                     <select class='form-control' name='privacyInput'>
-                        <option value='0'>Privacy</option>
-                        <option value='1'>Public</option>
+                        <option value='0' $privateSelected>Privacy</option>
+                        <option value='1' $publicSelected>Public</option>
                     </select>
                 </div>";
     }
 
-    private function createCategoriesInput() {
+    private function createCategoriesInput($value) {
+        if ($value == null) $value = "";
         $query = $this->con->prepare("SELECT * FROM categories");
         $query->execute();
 
@@ -63,8 +86,9 @@ class VideoDetailsFormProvider {
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
             $id = $row["id"];
             $name = $row["name"];
-            
-            $html .= "<option value='$id'>$name</option>";
+            $selected = $value == $id ? "selected='selected'" : "";
+
+            $html .= "<option $selected value='$id'>$name</option>";
         }
         $html .=     "</select>
                 </div>";
@@ -74,6 +98,10 @@ class VideoDetailsFormProvider {
 
     private function createUploadButton() {
         return "<button type='submit' class='btn btn-primary' name='uploadButton'>Upload</button>";
+    }
+
+    private function createSaveButton() {
+        return "<button type='submit' class='btn btn-primary' name='saveButton'>Save</button>";
     }
 }
 ?>
